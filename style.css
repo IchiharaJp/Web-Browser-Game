@@ -14,8 +14,17 @@ canvas {
     border-radius: 2em;
 }
 
+#footer {
+    position: absolute;
+    bottom: 0%;
+    font-size: 70%;
+}
+
 @media (max-width: 768px), (pointer: coarse) {
     canvas {
         border-radius: 0;
+    }
+    #footer {
+        display: none;
     }
 }
