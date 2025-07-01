@@ -1,2 +1,2 @@
 # Web-Browser-Game
-A simple game made to run in the browser using OOP.
+A simple easy game web game using Phaser 3
