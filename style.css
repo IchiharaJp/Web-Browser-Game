@@ -20,11 +20,34 @@ canvas {
     font-size: 70%;
 }
 
-@media (max-width: 768px), (pointer: coarse) {
+@media only screen and (pointer: coarse) {
     canvas {
         border-radius: 0;
     }
     #footer {
         display: none;
+    }
+}
+
+@media only screen and (max-height: 775px) {
+    canvas {
+        border: none;
+    }
+}
+
+canvas, body {
+    touch-action: none;
+}
+
+@media only screen and (max-height: 680px) and (pointer: fine){
+    canvas {
+        width: 100vw;
+        height: 100vh;
+    }
+}
+
+@media only screen and (max-width: 1186px) {
+    canvas {
+        width: 100vw
     }
 }

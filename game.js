@@ -17,16 +17,8 @@ let config = {
             debug: false,
         }
     },
-}
-
-let mobileScreen =  { scale: {
-        mode: Phaser.Scale.ENVELOP,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-    }
-}
-
-if (mobileMode()) {
-    config = {...config, ...mobileScreen};
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH
 }
 
 let game = new Phaser.Game(config);
@@ -89,10 +81,18 @@ function create() {
 
     // Mobile functions
 
-    if (this.sys.game.device.input.touch) {
-        let leftBtn = this.add.rectangle(75, 580, 70, 45, 0x006000, 0.6).setScrollFactor(0).setDepth(2).setInteractive();
-        let rightBtn = this.add.rectangle(195, 580, 70, 45, 0x600000, 0.6).setScrollFactor(0).setDepth(2).setInteractive();
-        let upBtn = this.add.rectangle(135, 523, 50, 70, 0x000060, 0.6).setScrollFactor(0).setDepth(2).setInteractive();
+    if (mobileMode()) {
+        this.input.addPointer(2);
+        const sw = this.scale.width;
+        const sh = this.scale.height;
+        console.log(sw, sh);
+
+
+        let leftBtn = this.add.rectangle(sw * 0.13, sh * 0.88, sw * 0.13, sh * 0.09, 0x006000, 0.6).setScrollFactor(0).setDepth(2).setInteractive();
+        let rightBtn = this.add.rectangle(sw * 0.27, sh * 0.88, sw * 0.13, sh * 0.09, 0x600000, 0.6).setScrollFactor(0).setDepth(2).setInteractive();
+        let upBtn = this.add.rectangle(sw * 0.86, sh * 0.85, sw * 0.10, sh * 0.13, 0x000060, 0.6).setScrollFactor(0).setDepth(2).setInteractive();
+
+        
         let textStyle = {
             fontSize: "15px",
             color: "#ffffff",
@@ -109,29 +109,30 @@ function create() {
 
     function assignBtn(btn, direction) {
         btn.name = direction;
-        btn.on("pointerdown", () => {
-            if (btn.name == "left")
-                leftPressed = true;
-            else if (btn.name == "right")
-                rightPressed = true;
-            else
-                upPressed = true;
+
+        btn.on("pointerdown", (pointer) => {
+            if (direction == "left") leftPressed = true;
+            if (direction == "right") rightPressed = true;
+            if (direction == "up") upPressed = true;
+            pointer.event.preventDefault && pointer.event.preventDefault();
         });
-        btn.on("pointerup", () => {
-            if (btn.name == "left")
-                leftPressed = false;
-            else if (btn.name == "right")
-                rightPressed = false;
-            else
-                upPressed = false;
+        btn.on("pointerup", (pointer) => {
+            if (direction == "left") leftPressed = false;
+            if (direction == "right") rightPressed = false;
+            if (direction == "up") upPressed = false;
+            pointer.event.preventDefault && pointer.event.preventDefault();
         });
-        btn.on("pointerout", () => {
-            if (btn.name == "left")
-                leftPressed = false;
-            else if (btn.name == "right")
-                rightPressed = false;
-            else
-                upPressed = false;
+        btn.on("pointerout", (pointer) => {
+            if (direction == "left") leftPressed = false;
+            if (direction == "right") rightPressed = false;
+            if (direction == "up") upPressed = false;
+            pointer.event.preventDefault && pointer.event.preventDefault();
+        });
+        btn.on("pointerupoutside", (pointer) => {
+            if (direction == "left") leftPressed = false;
+            if (direction == "right") rightPressed = false;
+            if (direction == "up") upPressed = false;
+            pointer.event.preventDefault && pointer.event.preventDefault();
         });
     }
 }
@@ -156,7 +157,6 @@ function update() {
             else player.anims.play("jumpRight", true);
         }
     }
-
     if (( cursors.up.isDown || upPressed ) && player.body.touching.down) {
         player.setVelocityY(-330);
         if (isLeft) player.anims.play("jumpLeft", true); 
